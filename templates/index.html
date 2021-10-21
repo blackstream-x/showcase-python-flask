@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Hello world! {% endblock %}</h1>
+    <h1>{% block title %} Overview {% endblock %}</h1>
     {% for post_data in posts %}
         <h2>
             <a href="{{ url_for('show_post', post_id=post_data['post_id']) }}">{{ post_data['title'] }}</a>

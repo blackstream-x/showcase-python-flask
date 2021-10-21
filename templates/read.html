@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <span class="badge badge-light"><a href="{{ url_for('index') }}">Back to overview</a></span>
+    <h1>{% block title %} {{ post_data['title'] }} {% endblock %}</h1>
+    <span class="badge badge-primary">Created: {{ post_data['created'] | local_time_display }}</span>
+    <p>{{ post_data['content'] }}</p>
+    <hr>
+    <form>
+        <input type="submit"
+                value="Edit"
+                formaction="{{ url_for('edit', post_id=post_data['post_id']) }}"
+                formmethod="GET"
+                class="btn btn-warning btn-sm">
+        <input type="submit"
+                value="Delete Post"
+                formaction="{{ url_for('delete', post_id=post_data['post_id']) }}"
+                formmethod="POST"
+                class="btn btn-danger btn-sm"
+                onclick="return confirm('Are you sure you want to delete the post “{{ post_data['title'] }}”?')">
+    </form>
+{% endblock %}

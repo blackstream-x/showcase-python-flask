@@ -55,7 +55,7 @@ def local_time_display(dt_string, local_time_zone=LOCAL_TIME_ZONE):
         provided_dt = provided_dt.replace(tzinfo=datetime.timezone.utc)
     #
     localized_dt = provided_dt.astimezone(local_time_zone)
-    return '{0} ({1})'.format(localized_dt, localized_dt.tzname())
+    return "{0} ({1})".format(localized_dt, localized_dt.tzname())
 
 
 @app.route("/")
@@ -73,7 +73,7 @@ def index():
 def show_post(post_id):
     """Detail page showing the post headline and content"""
     post_data = get_post_data(post_id)
-    return render_template("post.html", post=post_data)
+    return render_template("read.html", post_data=post_data)
 
 
 @app.route("/create", methods=("GET", "POST"))
@@ -84,13 +84,14 @@ def create():
         content = request.form["content"]
         if title:
             conn = get_db_connection()
-            conn.execute(
-                "INSERT INTO posts (title, content) VALUES (?, ?)",
+            post_id = conn.execute(
+                "INSERT INTO posts (title, content) VALUES (?, ?)"
+                "RETURNING post_id",
                 (title, content),
-            )
+            ).fetchone()["post_id"]
             conn.commit()
             conn.close()
-            return redirect(url_for("index"))
+            return redirect(url_for("show_post", post_id=post_id))
         #
         flash("Title is required!")
     #
@@ -107,15 +108,16 @@ def edit(post_id):
         if title:
             conn = get_db_connection()
             conn.execute(
-                "UPDATE posts SET title = ?, content = ?" " WHERE post_id = ?",
+                "UPDATE posts SET title = ?, content = ? WHERE post_id = ?",
                 (title, content, post_id),
             )
             conn.commit()
             conn.close()
-            return redirect(url_for("index"))
+            return redirect(url_for("show_post", post_id=post_id))
         #
+        flash("Title is required!")
     #
-    return render_template("edit.html", post=post_data)
+    return render_template("update.html", post_data=post_data)
 
 
 @app.route("/<int:post_id>/delete", methods=("POST",))
