@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Hello world! {% endblock %}</h1>
+    {% for post_data in posts %}
+        <h2>
+            <a href="{{ url_for('show_post', post_id=post_data['post_id']) }}">{{ post_data['title'] }}</a>
+        </h2>
+        <span class="badge badge-primary">Created: {{ post_data['created'] | local_time_display }}</span>
+        <form>
+            <input type="submit"
+                    value="Edit"
+                    formaction="{{ url_for('edit', post_id=post_data['post_id']) }}"
+                    formmethod="GET"
+                    class="btn btn-warning btn-sm">
+            <input type="submit"
+                    value="Delete Post"
+                    formaction="{{ url_for('delete', post_id=post_data['post_id']) }}"
+                    formmethod="POST"
+                    class="btn btn-danger btn-sm"
+                    onclick="return confirm('Are you sure you want to delete the post “{{ post_data['title'] }}”?')">
+        </form>
+        <hr>
+    {% endfor %}
+{% endblock %}
