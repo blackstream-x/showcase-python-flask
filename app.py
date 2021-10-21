@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """
 
 app.py
@@ -21,6 +22,7 @@ import backported
 from dateutil import tz
 from flask import Flask, render_template, request, url_for, flash, redirect
 from werkzeug.exceptions import abort
+
 
 LOCAL_TIME_ZONE = tz.gettz("Europe/Berlin")
 
