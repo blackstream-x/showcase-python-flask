@@ -13,14 +13,16 @@ an example flask application compiled based on the instructions from
 """
 
 import datetime
-import zoneinfo
 import sqlite3
 
+# Local backports module for Python 3.6
+import backported
+
+from dateutil import tz
 from flask import Flask, render_template, request, url_for, flash, redirect
 from werkzeug.exceptions import abort
 
-
-LOCAL_TIME_ZONE = zoneinfo.ZoneInfo("Europe/Berlin")
+LOCAL_TIME_ZONE = tz.gettz("Europe/Berlin")
 
 
 def get_db_connection():
@@ -50,7 +52,7 @@ app.config["SECRET_KEY"] = "random secret key ideally generated at deploy time"
 @app.template_filter("local_time_display")
 def local_time_display(dt_string, local_time_zone=LOCAL_TIME_ZONE):
     """Return an UTC datetime converted to local time"""
-    provided_dt = datetime.datetime.fromisoformat(dt_string)
+    provided_dt = backported.datetime_fromisoformat(dt_string)
     if not provided_dt.tzinfo:
         provided_dt = provided_dt.replace(tzinfo=datetime.timezone.utc)
     #
@@ -84,14 +86,13 @@ def create():
         content = request.form["content"]
         if title:
             conn = get_db_connection()
-            post_id = conn.execute(
-                "INSERT INTO posts (title, content) VALUES (?, ?)"
-                "RETURNING post_id",
+            conn.execute(
+                "INSERT INTO posts (title, content) VALUES (?, ?)",
                 (title, content),
-            ).fetchone()["post_id"]
+            )
             conn.commit()
             conn.close()
-            return redirect(url_for("show_post", post_id=post_id))
+            return redirect(url_for("index"))
         #
         flash("Title is required!")
     #
