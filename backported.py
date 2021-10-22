@@ -11,15 +11,15 @@ import datetime
 
 
 #
-# Helper functions from
-# <https://github.com/python/cpython/blob/
-#  00ddc1fbd7296ffe066077194a895b175cca26de/Lib/datetime.py#L265>
+# Helper functions, adapted from
+# <https://github.com/python/cpython/blob/v3.10.0/Lib/datetime.py#L265>
 #
 
 
 def _parse_isoformat_date(dtstr):
-    # It is assumed that this function will only be called with a
-    # string of length exactly 10, and (though this is not used) ASCII-only
+    """It is assumed that this function will only be called with a
+    string of length exactly 10, and (though this is not used) ASCII-only
+    """
     year = int(dtstr[0:4])
     if dtstr[4] != "-":
         raise ValueError("Invalid date separator: %s" % dtstr[4])
@@ -35,7 +35,7 @@ def _parse_isoformat_date(dtstr):
 
 
 def _parse_hh_mm_ss_ff(tstr):
-    # Parses things of the form HH[:MM[:SS[.fff[fff]]]]
+    """Parses things of the form HH[:MM[:SS[.fff[fff]]]]"""
     len_str = len(tstr)
 
     time_comps = [0, 0, 0, 0]
@@ -75,7 +75,7 @@ def _parse_hh_mm_ss_ff(tstr):
 
 
 def _parse_isoformat_time(tstr):
-    # Format supported is HH[:MM[:SS[.fff[fff]]]][+HH:MM[:SS[.ffffff]]]
+    """Format supported is HH[:MM[:SS[.fff[fff]]]][+HH:MM[:SS[.ffffff]]]"""
     len_str = len(tstr)
     if len_str < 2:
         raise ValueError("Isoformat time too short")
@@ -119,15 +119,16 @@ def _parse_isoformat_time(tstr):
 
 
 #
-# Drop.in replacement for the datetime.fromisoformat()
-# factory method, adapted from
-# <https://github.com/python/cpython/blob/
-#  00ddc1fbd7296ffe066077194a895b175cca26de/Lib/datetime.py#L1721>
+# Drop-in replacement for the datetime.fromisoformat()
+# factory method
 #
 
 
 def datetime_fromisoformat(date_string):
-    """Construct a datetime from the output of datetime.isoformat()."""
+    """Construct a datetime from the output of datetime.isoformat().
+    Adapted from
+    <https://github.com/python/cpython/blob/v3.10.0/Lib/datetime.py#L1721>
+    """
     if not isinstance(date_string, str):
         raise TypeError("fromisoformat: argument must be str")
 
