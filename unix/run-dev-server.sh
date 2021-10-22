@@ -3,5 +3,7 @@ if [ -z "${VIRTUAL_ENV}" ] ; then
     exit 1
 fi
 
-. ./set_environment_dev.sh
+export FLASK_APP=app
+export FLASK_ENV=development
+
 python -m flask run

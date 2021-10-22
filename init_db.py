@@ -34,3 +34,5 @@ cur.execute(
 
 connection.commit()
 connection.close()
+
+print("Initialized database schema.")

@@ -10,7 +10,7 @@ goto END
 
 :DATABASE_EXISTS
 
-echo Die Datenbank existiert bereits:
-dir /b database.db
+echo The database exists already:
+dir database.db
 
 :END
