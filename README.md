@@ -10,3 +10,5 @@ https://www.digitalocean.com/community/tutorials/how-to-make-a-web-application-u
 * run `unix/run-dev-server.sh` or on Windows `msdos\run-dev-server`,
 * finally access the application with your web browser at local port 5000:
 <http://localhost:5000/>
+
+**See Gitlab project**
